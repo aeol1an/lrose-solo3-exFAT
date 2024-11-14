@@ -2,6 +2,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 
+#include <sp_basics.hh>
 #include <DataManager.hh>
 #include <ddb_common.hh>
 #include <dd_math.h>
@@ -1614,7 +1615,24 @@ void DataInfo::updateSweepFile(const bool editing)
     if (path[path.size()-1] != '/')
       path += "/";
     path += _info->orig_sweep_file_name;
-    
+
+    //Make sure we close the files we are about to delete
+    //This is the easy one, it's in the _info variable
+    dd_close(_info->in_swp_fid);
+
+    //The harder one to find is the one open in the window
+    //Had to include sp_basics.hh to get this one
+    WW_PTR wwptr = solo_return_wwptr(0);
+    int cur_file_fd = wwptr->file_id;
+    std::string open_file_path = wwptr->sweep->directory_name;
+    if (open_file_path[open_file_path.size()-1] != '/')
+      open_file_path += "/";
+    open_file_path += wwptr->sweep->file_name;
+    //If the currently open file is the one we're about to
+    //delete, close it
+    if (open_file_path == path)
+      dd_close(cur_file_fd);
+	  
     dd_unlink(path.c_str());
   }
 
