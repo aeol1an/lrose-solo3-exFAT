@@ -6,6 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.50])
 AC_INIT([solo3], [2.0.0], [http://www.ral.ucar.edu/projects/titan/docs])
 
+# Keep libtool macros in an m4 directory.
 AC_CONFIG_MACRO_DIR([m4])
 
 # Explicit archiver needed for later automake
@@ -17,8 +18,6 @@ echo -n AC_PACKAGE_VERSION>VERSION
 AC_SUBST(PACKAGE_VERSION)
 AC_MSG_NOTICE([netCDF AC_PACKAGE_VERSION])
 
-# Keep libtool macros in an m4 directory.
-AC_CONFIG_MACRO_DIR([m4])
 
 # Find out about the host we're building on.
 AC_CANONICAL_HOST
